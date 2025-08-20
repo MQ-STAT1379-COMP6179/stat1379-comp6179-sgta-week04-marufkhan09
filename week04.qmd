@@ -684,7 +684,8 @@ filter(babynames, name == Sea)
 **Your corrected code:**
 ```{r fix-code-student, eval=FALSE}
 # Fixed code here:
-
+filter(babynames, name == "Sea")
+filter(babynames, name == "Sea")
 
 ```
 
@@ -698,15 +699,20 @@ Which name was the most popular for a single gender in a single year? Compare ar
 
 ```{r popular-names-student, eval=FALSE}
 # Your code to find highest proportion:
-
+babynames |>
+  arrange(desc(prop)) |>
+  head(5)
 
 # Your code to find highest count:
 
-
+babynames |>
+  arrange(desc(n)) |>
+  head(5)
 ```
 
 **Your analysis:**
 - Are the results the same? Why or why not?
+no they are not prop gives the most dominant in that year and count gives the largest number of babies in the year.
 
 
 
@@ -720,7 +726,13 @@ Write a pipeline that will:
 
 ```{r girls-2017-student, eval=FALSE}
 # Your pipeline here:
+library(dplyr)
 
+babynames |>
+  filter(sex == "F", year == 2017) |>
+  select(name, n) |>
+  arrange(desc(n)) |>
+  head(5)
 
 ```
 
@@ -803,10 +815,30 @@ cholesterol_data
 
 ```{r cholesterol-solution-student, eval=FALSE}
 # Task 1 - Convert to long format:
+library(tidyr)
+library(dplyr)
 
+cholesterol_long <- cholesterol_data |>
+  pivot_longer(
+    cols = everything(),       # Convert all columns
+    names_to = "diet",         # New column for diet group
+    values_to = "cholesterol"  # New column for cholesterol values
+  )
+
+cholesterol_long
 
 # Task 2 - Calculate summary statistics:
 
+
+cholesterol_summary <- cholesterol_long |>
+  group_by(diet) |>
+  summarise(
+    n = n(),                       # Number of observations
+    mean_chol = mean(cholesterol), # Mean cholesterol
+    sd_chol = sd(cholesterol)      # Standard deviation
+  )
+
+cholesterol_summary 
 
 ```
 
